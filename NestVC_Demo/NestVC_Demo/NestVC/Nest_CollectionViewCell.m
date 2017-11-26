@@ -7,82 +7,41 @@
 //
 
 #import "Nest_CollectionViewCell.h"
-#import "HomeCCell.h"
-@interface Nest_CollectionViewCell()<UICollectionViewDataSource,UICollectionViewDelegateFlowLayout>
-@property (nonatomic, assign)BOOL isRigistered;
-@end
-
+NSString * const CellSelectedNotification = @"CellSelectedNotification";
 @implementation Nest_CollectionViewCell
 
 - (id)initWithFrame:(CGRect)frame{
     if (self = [super initWithFrame:frame]) {
+        _pageForIndex = @{}.mutableCopy;
+        _dataForRowArray = @{}.mutableCopy;
+        _paraDic = @{}.mutableCopy;
         UICollectionViewFlowLayout * flowLayout = [[UICollectionViewFlowLayout alloc] init];
-        _subCollectionView = [[UICollectionView alloc]initWithFrame:CGRectMake(0, 0, 0, 0) collectionViewLayout:flowLayout];
-        _subCollectionView.delegate = self.delegate;
-        _subCollectionView.dataSource = self.delegate;
-        [self.contentView addSubview:_subCollectionView];
-        [_subCollectionView setBackgroundColor:[UIColor whiteColor]];
-        _isRigistered = NO;
-        
-        
-        _subCollectionView.mj_header = [MJRefreshNormalHeader headerWithRefreshingTarget:self refreshingAction:@selector(requestData)];
-        _subCollectionView.mj_footer = [MJRefreshAutoNormalFooter footerWithRefreshingTarget:self refreshingAction:@selector(loadMore)];
-        
+        [flowLayout setMinimumInteritemSpacing:0.0f];
+        [flowLayout setMinimumLineSpacing:0.0f];
+        [flowLayout setSectionInset:UIEdgeInsetsZero];
+        _subCollectionView = [[UICollectionView alloc]initWithFrame:CGRectMake(0, 0, self.frame.size.width, 300) collectionViewLayout:flowLayout];
+        [_subCollectionView setBackgroundColor:[UIColor colorWithHexString:@"0xffffff"]];
+        _subCollectionView.delegate = self;
+        _subCollectionView.dataSource = self;
+        [self addSubview:_subCollectionView];
         [_subCollectionView mas_makeConstraints:^(MASConstraintMaker *make) {
-            make.leading.equalTo(self.contentView);
-            make.trailing.equalTo(self.contentView);
-            make.top.equalTo(self.contentView).offset(44);
-            make.bottom.equalTo(self.contentView);
+            make.leading.equalTo(self);
+            make.trailing.equalTo(self);
+            make.top.equalTo(self);//44
+            make.bottom.equalTo(self);
         }];
-        _delegate = nil;
+        
+
     }
     return self;
 }
 
-- (void)requestData{
-    if ([self.delegate respondsToSelector:@selector(headerRefreshEvent:)]) {
-        [self.delegate headerRefreshEvent:_subCollectionView];
-        return;
-    }
-    [_subCollectionView.mj_header endRefreshing];
+- (NSInteger)currentSwitchBtnIndex{
+    return _currentVC.currentSwitchBtnIndex;
 }
 
-- (void)loadMore{
-    if ([self.delegate respondsToSelector:@selector(footerRefreshEvent:)]) {
-        [self.delegate footerRefreshEvent:_subCollectionView];
-        return;
-    }
-    [_subCollectionView.mj_footer endRefreshingWithNoMoreData];
++ (NSString *)cellIdentifiter{
+    return  @"Nest_CollectionViewCellIdentif";
 }
 
-
-- (void)setDelegate:(id)delegate{
-    if (_delegate) {
-        return;
-    }
-    _delegate = delegate;
-    _subCollectionView.delegate = _delegate;
-    _subCollectionView.dataSource = _delegate;
-}
-
-- (void)registerClassString:(NSString *)classString withCellIdentifiter:(NSString *)identifiter{
-    if (_isRigistered) {
-        return;
-    }
-    _isRigistered = YES;
-//    NSString * file = [[NSBundle mainBundle] pathForResource:classString ofType:@".nib"];
-    UINib *nib = [UINib nibWithNibName:classString bundle:[NSBundle mainBundle]];
-    if (nib) {
-         [self.subCollectionView registerNib:nib forCellWithReuseIdentifier:identifiter];
-    }
-    else{
-        [self.subCollectionView registerClass:NSClassFromString(classString) forCellWithReuseIdentifier:identifiter];
-    }
-}
-+ (NSString *)identifiter{
-    return @"Nest_CollectionViewCell";
-}
-- (void)awakeFromNib{
-    [super awakeFromNib];
-}
 @end

@@ -17,6 +17,7 @@
 @property (nonatomic, assign)NSInteger currentIndex;//默认1: 1...n
 @property (weak ,nonatomic) id<SwitchViewButtonDelegate>delegate;
 + (CGSize)contentSize;
+- (void)hiddenBottomLine:(BOOL)hidden;
 @end
 
 

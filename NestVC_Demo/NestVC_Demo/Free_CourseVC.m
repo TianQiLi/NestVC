@@ -8,10 +8,6 @@
 
 #import "Free_CourseVC.h"
 #import "HomeCCell.h"
-#import "VideoCourseDetailViewController.h"
-#import "FreeRecord_CourseManager.h"
-#import "ErrorView.h"
-#import "ErrorCollectionViewCell.h"
 @interface Free_CourseVC()
 @property (nonatomic, assign) NSInteger type;//2 :口语, 3: 听力,  4 :阅读, 5:写作
 @property (nonatomic, strong) NSArray * dataArray;
@@ -20,7 +16,9 @@
 @end
 
 @implementation Free_CourseVC
-
++ (NSString *)cellIdentifiter{
+    return @"Free_CourseVCIdentifi";
+}
 /*
 // Only override drawRect: if you perform custom drawing.
 // An empty implementation adversely affects performance during animation.
@@ -38,11 +36,14 @@
         self.subCollectionView.mj_header = [MJRefreshNormalHeader headerWithRefreshingTarget:self refreshingAction:@selector(loadData)];
         [self setFooter];
         [self.subCollectionView registerNib:[UINib nibWithNibName:@"HomeCCell" bundle:[NSBundle mainBundle]] forCellWithReuseIdentifier:[HomeCCell identifier]];
-        [self.subCollectionView registerClass:[ErrorCollectionViewCell class] forCellWithReuseIdentifier:[ErrorCollectionViewCell identifiter]];
-         [self.subCollectionView registerNib:[UINib nibWithNibName:@"ErrorCollectionViewCell" bundle:nil] forCellWithReuseIdentifier:[ErrorCollectionViewCell identifiter]];
+        
         NSArray * typeArray = [self getTypeArray];
         _type = [typeArray[0] integerValue];
         _requestOk = YES;
+        [self.subCollectionView mas_updateConstraints:^(MASConstraintMaker *make) {
+            make.top.equalTo(self).offset(44);//44
+            
+        }];
     }
     return self;
 }
@@ -72,19 +73,6 @@
     return @[@(2),@(3),@(4),@(5)];
 }
 
-//- (void)switchBttonClickNotificationHandle:(NSNotification *)notification{
-//    NSInteger index = notification.object ? ([notification.object integerValue] - 1) : 0;
-//    NSArray * typeArray = [self getTypeArray];
-//    _type = [typeArray[index] integerValue];
-//    
-//    if (!self.dataForRowArray[@(self.row)]) {
-//        [self.subCollectionView.mj_header beginRefreshing];
-//    }
-//    else{
-//        [self.subCollectionView reloadData];
-//    }
-//}
-
 - (void)requestData{
      [self setFooter];
      self.requestOk = YES;
@@ -93,11 +81,13 @@
     _examId = examId;
     NSArray * array = [self getTypeArray];
     _type = [array[self.row] integerValue];
-    [FreeRecord_CourseManager queryFRCourseListWithExamId:_examId type:_type withPage:self.page limit:8 success:^(NSArray<FreeRecord_CourseModel *> *results) {
-        [self handleResults:results withStatus:YES];
-    } failure:^(NSError *error) {
-        [self handleResults:@[] withStatus:NO];
-    }];
+
+    [self handleResults:@[@"1",@"2"] withStatus:YES];
+//    [FreeRecord_CourseManager queryFRCourseListWithExamId:_examId type:_type withPage:self.page limit:8 success:^(NSArray<FreeRecord_CourseModel *> *results) {
+//        [self handleResults:results withStatus:YES];
+//    } failure:^(NSError *error) {
+//        [self handleResults:@[] withStatus:NO];
+//    }];
 }
 
 - (void)loadData{
@@ -119,9 +109,6 @@
         [self.subCollectionView reloadData];
         self.subCollectionView.mj_footer = nil;
         return;
-    }
-    if (!successed) {
-         [SVProgressHUD showErrorWithStatus:@"数据请求失败"];
     }
     
     if (self.page == 1) {
@@ -167,44 +154,25 @@
 
 - (CGSize)collectionView:(UICollectionView *)collectionView layout:(UICollectionViewLayout *)collectionViewLayout sizeForItemAtIndexPath:(NSIndexPath *)indexPath{
     if (!self.dataArray || self.dataArray.count == 0) {
-        return CGSizeMake(self.frame.size.width, self.subCollectionView.size.height-60);
+        return CGSizeMake(self.frame.size.width, self.subCollectionView.frame.size.height-60);
     }
-    return [HomeCCell sizeNew:FreeCourse];
+    return [HomeCCell size];
 }
 
 - (UICollectionViewCell *)collectionView:(UICollectionView *)collectionView cellForItemAtIndexPath:(NSIndexPath *)indexPath{
-    ErrorCollectionViewCell * cellError = [collectionView dequeueReusableCellWithReuseIdentifier:[ErrorCollectionViewCell identifiter] forIndexPath:indexPath];
-    if (!self.requestOk) {
-        NSString * imgPic = @"home_icon_retry";
-        NSString * errorText = @"课程内容加载失败，请刷新重试";
-        [cellError imageName:imgPic];
-        [cellError tipsText:errorText];
-        return cellError;
-    }
+ 
     if (!self.dataArray || self.dataArray.count == 0) {
-        NSString * imgPic = @"icon_No-content";
-        NSString * errorText = @"课程在筹备中，敬请期待";
-        [cellError imageName:imgPic];
-        [cellError tipsText:errorText];
-        return cellError;
+ 
     }
     
     HomeCCell * cell = [collectionView dequeueReusableCellWithReuseIdentifier:[HomeCCell identifier] forIndexPath:indexPath];
-    FreeRecord_CourseModel * model = self.dataArray[indexPath.row];
-    [cell imgUrl:model.image title:model.name teacherName:[NSString stringWithFormat:@"主讲人:%@",model.teacher]];
-    cell.alpha = 0.1;
-    [UIView animateWithDuration:0.8 delay:0 options:0 animations:^{
-        cell.alpha = 1;
-    } completion:^(BOOL finished) {
-        
-    }];
 
     return  cell;
 }
 
 - (UIEdgeInsets)collectionView:(UICollectionView *)collectionView layout:(UICollectionViewLayout *)collectionViewLayout insetForSectionAtIndex:(NSInteger)section
 {
-    return UIEdgeInsetsMake(0, 16*Screen_widthScale, 0, 16*Screen_widthScale);
+    return UIEdgeInsetsMake(0, 10, 0, 10);
 }
 
 
@@ -213,23 +181,12 @@
 }
 
 - (CGFloat)collectionView:(UICollectionView *)collectionView layout:(UICollectionViewLayout *)collectionViewLayout minimumInteritemSpacingForSectionAtIndex:(NSInteger)section{
-    return 23*Screen_widthScale;
+    return 10;
 }
 
 - (void)collectionView:(UICollectionView *)collectionView didSelectItemAtIndexPath:(NSIndexPath *)indexPath{
     UICollectionViewCell * cell = [collectionView cellForItemAtIndexPath:indexPath];
-    if ([cell isKindOfClass:[ErrorCollectionViewCell class]]) {
-        [self.subCollectionView.mj_header beginRefreshing];
-        return;
-    }
-    FreeRecord_CourseModel * model = self.dataArray[indexPath.row];
-    [self toVideoCourseDetailWithModel:model];
-}
-
--(void)toVideoCourseDetailWithModel:(FreeRecord_CourseModel *)model{
-    VideoCourseDetailViewController *videoCourse = [[UIStoryboard storyboardWithName:@"Home" bundle:nil] instantiateViewControllerWithIdentifier:@"VideoCourseDetailViewController"];
-    videoCourse.freeRecord_Course = model;
-    [self.currentVC.navigationController pushViewController:videoCourse animated:YES];
+  
 }
 
 - (NSArray *)dataArray{

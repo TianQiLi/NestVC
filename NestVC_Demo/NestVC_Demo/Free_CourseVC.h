@@ -10,4 +10,5 @@
 extern NSString * const SwitchBttonClickNotification;
 @interface Free_CourseVC : Nest_CollectionViewCell
 @property (nonatomic, assign) NSInteger examId;
++ (NSString *)cellIdentifiter;
 @end

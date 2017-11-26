@@ -6,9 +6,9 @@ target 'NestVC_Demo' do
   # use_frameworks!
 
   # Pods for NestVC_Demo
-#pod 'Masonry'
+pod 'Masonry'
 ## 下拉刷新
-#pod 'MJRefresh', '~>2.0'
-#pod 'pop','~>1.0'
-pod 'NestVC', :path => './NestVC'
+pod 'MJRefresh', '~>2.0'
+pod 'pop','~>1.0'
+#pod 'NestVC', :path => './NestVC'
 end

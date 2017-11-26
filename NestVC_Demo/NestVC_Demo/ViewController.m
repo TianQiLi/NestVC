@@ -7,22 +7,31 @@
 //
 
 #import "ViewController.h"
-#import "DemoViewController.h"
 #import "HomeCCell.h"
+#import "NestVC.h"
+#import "Free_CourseVC.h"
+#import "SwitchViewButton.h"
 @interface ViewController ()
 
 @end
 
 @implementation ViewController
 - (IBAction)clickPresentBtn:(id)sender {
-    DemoViewController * vc = [[DemoViewController alloc] initWithSwitchItemArray:@[@"分类1",@"分类2",@"分类3",@"分类4",@"分类5",@"分类6"] withClass:NSStringFromClass([HomeCCell class]) withIdentifiter:[HomeCCell identifier]];
-    [self.navigationController pushViewController:vc animated:YES];
+   
+//    NestVC * courseVC = [[NestVC alloc] initWithSwitchItemArray:@[@"录播",@"直播",@"试卷"]  withClassArray:@[NSStringFromClass([Free_CourseVC class]),NSStringFromClass([Free_CourseVC class])] withIdentifiter:@[[Free_CourseVC  cellIdentifiter],[Free_CourseVC  cellIdentifiter],[Free_CourseVC  cellIdentifiter]]];
+     NestVC * courseVC = [[NestVC alloc] initWithSwitchItemArray:@[@"录播",@"直播",@"试卷"]  withClassArray:@[NSStringFromClass([Free_CourseVC class])] withIdentifiter:@[[Free_CourseVC  cellIdentifiter]]];
+    [self.navigationController pushViewController:courseVC animated:YES];
 }
 
 - (void)viewDidLoad {
     [super viewDidLoad];
     // Do any additional setup after loading the view, typically from a nib.
-    
+    SwitchViewButton * _switchViewButton = [[SwitchViewButton alloc] initWithFrame:CGRectMake(0, 64, self.view.frame.size.width,48)];
+    _switchViewButton.arrayItem = @[@"录播",@"直播",@"试卷"];
+    //    _switchViewButton.delegate = self;
+    [_switchViewButton setBackgroundColor:[UIColor whiteColor]];
+    [self.view addSubview:_switchViewButton];
+
 }
 
 

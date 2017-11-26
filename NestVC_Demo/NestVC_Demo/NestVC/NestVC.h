@@ -7,11 +7,16 @@
 //
 
 #import <UIKit/UIKit.h>
-#import "SwitchViewButton.h"
-#import <MJRefresh.h>
-#import <Masonry.h>
-
+extern NSString * const SwitchBttonClickNotification;
 @interface NestVC : UIViewController
-@property (nonatomic, strong) SwitchViewButton * switchViewButton;
-- (id)initWithSwitchItemArray:(NSArray *)arrayItem withClass:(NSString *)classCell withIdentifiter:(NSString *)cellIdentifiter;
+/** paramater */
+@property (nonatomic, strong) NSDictionary *paramaterDic;
+- (id)initWithSwitchItemArray:(NSArray *)arrayItem withDelegate:(id)obj;
+- (id)initWithSwitchItemArray:(NSArray *)arrayItem withClassArray:(NSArray *)classCellArray withIdentifiter:(NSArray *)cellIdentiArray;
+
+- (void)setSwitchButtonBottomMargin:(NSInteger)bottomMargin;
+- (void)staticsCourseType:(NSInteger)index;
+
+- (void)setCurrentSwitchButtonIndex:(NSInteger)switchBtnIndex;
+- (NSInteger)currentSwitchBtnIndex;
 @end

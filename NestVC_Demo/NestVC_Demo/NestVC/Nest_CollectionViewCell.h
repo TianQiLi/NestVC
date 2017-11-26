@@ -7,23 +7,27 @@
 //
 
 #import <UIKit/UIKit.h>
-#import <MJRefresh.h>
-#import <Masonry.h>
 
-@protocol Nest_CollectionViewRefreshDelegate <NSObject>
-- (void)headerRefreshEvent:(UICollectionView *)collectionView;
-- (void)footerRefreshEvent:(UICollectionView *)collectionView;
-
-@end
-
-@interface Nest_CollectionViewCell : UICollectionViewCell
-@property (nonatomic ,strong)UICollectionView * subCollectionView;
-/** delegate */
-@property (nonatomic, weak) id<Nest_CollectionViewRefreshDelegate> delegate;
+//@protocol Nest_CollectionViewCellDelegate <NSObject>
+//
+//- (void)scrollViewCurrentIndexPath:(NSIndexPath *)indexPath;
+//
+//@end
+extern NSString * const SwitchBttonClickNotification;
+extern NSString * const CellSelectedNotification;
+#import "NestVC.h"
+@interface Nest_CollectionViewCell : UICollectionViewCell<UICollectionViewDataSource,UICollectionViewDelegateFlowLayout>
+@property (readonly)UICollectionView * subCollectionView;
+/** para */
+@property (nonatomic, strong) NSDictionary *paraDic;
 /** id */
-//@property (nonatomic, weak) UIViewController * currentVC;
-- (void)setDelegate:(id)delegate;
-- (void)registerClassString:(NSString *)classString withCellIdentifiter:(NSString *)identifiter;
+@property (nonatomic, weak) NestVC * currentVC;
+@property (nonatomic, strong) NSMutableDictionary *dataForRowArray;
+@property (nonatomic, strong) NSMutableDictionary *pageForIndex;
+/** row */
+@property (nonatomic, assign) NSInteger row;//in superCollection
+@property (nonatomic, assign) NSInteger page;//1...n
+@property (nonatomic, assign,readonly) NSInteger currentSwitchBtnIndex;//1...n
++ (NSString *)cellIdentifiter;
 
-+ (NSString *)identifiter;
 @end
