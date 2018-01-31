@@ -10,3 +10,9 @@
     Nest_CollectionViewCell is the   containers collection's  cell；
     in addition ,Nest_CollectionViewCell include a subCollection to satisfy u custom cell implement
  
+DEMO:
+
+create a new ViewController:
+
+NestVC * courseVC = [[NestVC alloc] initWithSwitchItemArray:@[@"录播",@"直播",@"试卷"]  withClassArray:@[NSStringFromClass([Free_CourseVC class])] withIdentifiter:@[[Free_CourseVC  cellIdentifiter]]];
+    [self.navigationController pushViewController:courseVC animated:YES];
