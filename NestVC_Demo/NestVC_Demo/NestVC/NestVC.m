@@ -17,12 +17,11 @@ NSString * const SwitchBttonClickNotification = @"SwitchBttonClickNotification";
 @property (nonatomic, strong) UICollectionView * collection;
 @property (nonatomic, strong) SwitchViewButton * switchViewButton;
 @property (nonatomic, strong) NSArray * arrayItem;
-//@property (nonatomic, strong) NSString *  classCustom;
 @property (nonatomic, strong) NSArray *  classCustomArray;
-//@property (nonatomic, strong) NSString *cellIdentifiter;
 @property (nonatomic, strong) NSArray *cellIdentifiterArray;
-
+/*存储不同page 的数据*/
 @property (nonatomic, strong) NSMutableDictionary *dataForRowArray;
+/*page 的index 用于获取对应的数据*/
 @property (nonatomic, strong) NSMutableDictionary *pageForIndex;
 @property (nonatomic, assign) NSInteger bottomMargin;//button & cell
 @property (nonatomic, assign) NSInteger currentSwitchBtnIndex;//1...n
@@ -62,23 +61,30 @@ NSString * const SwitchBttonClickNotification = @"SwitchBttonClickNotification";
     [super viewDidLoad];
     // Do any additional setup after loading the view.
     [self.view setBackgroundColor:[UIColor colorWithHexString:@"0xf4f4f4"]];
+    self.automaticallyAdjustsScrollViewInsets = NO;
     _dataForRowArray = [NSMutableDictionary new];
     _pageForIndex = [NSMutableDictionary new];
-    _switchViewButton = [[SwitchViewButton alloc] initWithFrame:CGRectMake(0, 0, self.view.frame.size.width,48)];
+    self.switchViewButton = [[SwitchViewButton alloc] initWithFrame:CGRectMake(0, 0, self.view.frame.size.width,48)];
     _switchViewButton.arrayItem = _arrayItem;
     _switchViewButton.delegate = self;
-     [_switchViewButton setBackgroundColor:[UIColor whiteColor]];
-     [self.view addSubview:_switchViewButton];
-     [_switchViewButton hiddenBottomLine:YES];
-    
+    [_switchViewButton hiddenBottomLine:YES];
+    [self.view addSubview:_switchViewButton];
+   
+    [_switchViewButton mas_makeConstraints:^(MASConstraintMaker *make) {
+        make.leading.equalTo(self.view);
+        make.trailing.equalTo(self.view);
+        make.top.equalTo(self.view).offset(64);
+        make.height.equalTo(@(48));
+    }];
     
     UICollectionViewFlowLayout * flowLayout = [[UICollectionViewFlowLayout alloc] init];
     flowLayout.scrollDirection = UICollectionViewScrollDirectionHorizontal;
     [flowLayout setMinimumInteritemSpacing:0.0f];
     [flowLayout setMinimumLineSpacing:0.0f];
     [flowLayout setSectionInset:UIEdgeInsetsZero];
-
-    _collection = [[UICollectionView alloc]initWithFrame:CGRectMake(0, 0, 0, 0) collectionViewLayout:flowLayout];
+    flowLayout.headerReferenceSize = CGSizeZero;
+    flowLayout.footerReferenceSize = CGSizeZero;
+    self.collection = [[UICollectionView alloc]initWithFrame:CGRectMake(0, 0, 0, 0) collectionViewLayout:flowLayout];
     _collection.delegate = self;
     _collection.dataSource = self;
     _collection.pagingEnabled = YES;
@@ -96,24 +102,15 @@ NSString * const SwitchBttonClickNotification = @"SwitchBttonClickNotification";
     
     }
     
-    [_switchViewButton mas_makeConstraints:^(MASConstraintMaker *make) {
-        make.leading.equalTo(self.view);
-        make.trailing.equalTo(self.view);
-        make.top.equalTo(self.view).offset(64);
-        make.height.equalTo(@(48));
-    }];
-    
     [_collection mas_makeConstraints:^(MASConstraintMaker *make) {
         make.leading.equalTo(self.view);
         make.trailing.equalTo(self.view);
         make.top.equalTo(self.switchViewButton.mas_bottom).offset(_bottomMargin);
         make.bottom.equalTo(self.view);
     }];
-    [self.view setNeedsLayout];
-    [self.view layoutIfNeeded];
+    [_collection setNeedsLayout];
+    [_collection layoutIfNeeded];
     
-    
-//     [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(reLayoutCollectionView:) name:UIDeviceOrientationDidChangeNotification object:nil];
 }
 
 -(void)reLayoutCollectionView:(NSNotification *)notification {
@@ -132,7 +129,6 @@ NSString * const SwitchBttonClickNotification = @"SwitchBttonClickNotification";
 }
 
 - (UICollectionViewCell *)collectionView:(UICollectionView *)collectionView cellForItemAtIndexPath:(NSIndexPath *)indexPath{
-
     NSString * cellIdentifiter = @"";
     if (indexPath.row < self.cellIdentifiterArray.count) {
          cellIdentifiter = self.cellIdentifiterArray[indexPath.row];
@@ -142,14 +138,12 @@ NSString * const SwitchBttonClickNotification = @"SwitchBttonClickNotification";
     
     Nest_CollectionViewCell * cell = [collectionView dequeueReusableCellWithReuseIdentifier:cellIdentifiter forIndexPath:indexPath];
     cell.paraDic = self.paramaterDic;
-//    cell.currentSwitchBtnIndex = self.currentSwitchBtnIndex;
     cell.row = indexPath.row;//override
     cell.currentVC = self;
     return cell;
 }
 
 - (void)collectionView:(UICollectionView *)collectionView willDisplayCell:(UICollectionViewCell *)cell forItemAtIndexPath:(NSIndexPath *)indexPath{
-//    DDLogInfo(@"testrow=%ld\n",indexPath.row);
     Nest_CollectionViewCell * cellNew = (Nest_CollectionViewCell *)cell;
     NSNumber * page = self.pageForIndex[@(indexPath.row)];
     cellNew.page = page? [page integerValue] : 1;
@@ -157,16 +151,10 @@ NSString * const SwitchBttonClickNotification = @"SwitchBttonClickNotification";
     cellNew.pageForIndex = self.pageForIndex;
     cellNew.dataForRowArray = self.dataForRowArray;
     cellNew.row = indexPath.row;//override
-    
-
 }
 
-- (CGFloat)collectionView:(UICollectionView *)collectionView layout:(UICollectionViewLayout *)collectionViewLayout minimumInteritemSpacingForSectionAtIndex:(NSInteger)section{
-    return 0;
-}
-
-- (CGFloat)collectionView:(UICollectionView *)collectionView layout:(UICollectionViewLayout *)collectionViewLayout minimumLineSpacingForSectionAtIndex:(NSInteger)section{
-    return 0;
+- (CGSize)collectionView:(UICollectionView *)collectionView layout:(UICollectionViewLayout *)collectionViewLayout referenceSizeForHeaderInSection:(NSInteger)section{
+    return CGSizeZero;
 }
 
 - (void)scrollViewWillEndDragging:(UIScrollView *)scrollView withVelocity:(CGPoint)velocity targetContentOffset:(inout CGPoint *)targetContentOffset{

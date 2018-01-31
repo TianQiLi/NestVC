@@ -23,6 +23,6 @@
 }
 
 + (CGSize)size{
-    return CGSizeMake(167, 164);
+    return CGSizeMake(167, 110);
 }
 @end

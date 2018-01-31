@@ -18,8 +18,10 @@
 @implementation ViewController
 - (IBAction)clickPresentBtn:(id)sender {
    
-//    NestVC * courseVC = [[NestVC alloc] initWithSwitchItemArray:@[@"录播",@"直播",@"试卷"]  withClassArray:@[NSStringFromClass([Free_CourseVC class]),NSStringFromClass([Free_CourseVC class])] withIdentifiter:@[[Free_CourseVC  cellIdentifiter],[Free_CourseVC  cellIdentifiter],[Free_CourseVC  cellIdentifiter]]];
-     NestVC * courseVC = [[NestVC alloc] initWithSwitchItemArray:@[@"录播",@"直播",@"试卷"]  withClassArray:@[NSStringFromClass([Free_CourseVC class])] withIdentifiter:@[[Free_CourseVC  cellIdentifiter]]];
+//    SubViewController * vc = [[SubViewController alloc] init];
+//    [self.navigationController pushViewController:vc animated:YES];
+    
+    NestVC * courseVC = [[NestVC alloc] initWithSwitchItemArray:@[@"录播",@"直播",@"试卷"]  withClassArray:@[NSStringFromClass([Free_CourseVC class])] withIdentifiter:@[[Free_CourseVC  cellIdentifiter]]];
     [self.navigationController pushViewController:courseVC animated:YES];
 }
 

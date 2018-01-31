@@ -40,10 +40,7 @@
         NSArray * typeArray = [self getTypeArray];
         _type = [typeArray[0] integerValue];
         _requestOk = YES;
-        [self.subCollectionView mas_updateConstraints:^(MASConstraintMaker *make) {
-            make.top.equalTo(self).offset(44);//44
-            
-        }];
+        
     }
     return self;
 }
@@ -55,8 +52,7 @@
         if (self.dataArray.count == 0) {
             [self.subCollectionView.mj_header beginRefreshing];
         }
-        else{
-//            self.dataArray = self.dataForRowArray[@(self.row)];
+        else{   
             self.requestOk = YES;
             [self.subCollectionView reloadData];
         }
@@ -82,7 +78,7 @@
     NSArray * array = [self getTypeArray];
     _type = [array[self.row] integerValue];
 
-    [self handleResults:@[@"1",@"2"] withStatus:YES];
+    [self handleResults:@[@"1",@"2",@"2",@"2",@"2",@"2"] withStatus:YES];
 //    [FreeRecord_CourseManager queryFRCourseListWithExamId:_examId type:_type withPage:self.page limit:8 success:^(NSArray<FreeRecord_CourseModel *> *results) {
 //        [self handleResults:results withStatus:YES];
 //    } failure:^(NSError *error) {
@@ -160,13 +156,7 @@
 }
 
 - (UICollectionViewCell *)collectionView:(UICollectionView *)collectionView cellForItemAtIndexPath:(NSIndexPath *)indexPath{
- 
-    if (!self.dataArray || self.dataArray.count == 0) {
- 
-    }
-    
     HomeCCell * cell = [collectionView dequeueReusableCellWithReuseIdentifier:[HomeCCell identifier] forIndexPath:indexPath];
-
     return  cell;
 }
 
@@ -177,7 +167,7 @@
 
 
 - (CGFloat)collectionView:(UICollectionView *)collectionView layout:(UICollectionViewLayout *)collectionViewLayout minimumLineSpacingForSectionAtIndex:(NSInteger)section{
-    return 0;
+    return 5;
 }
 
 - (CGFloat)collectionView:(UICollectionView *)collectionView layout:(UICollectionViewLayout *)collectionViewLayout minimumInteritemSpacingForSectionAtIndex:(NSInteger)section{

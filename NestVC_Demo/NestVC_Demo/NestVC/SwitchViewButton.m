@@ -27,7 +27,8 @@
 
 -(id)initWithFrame:(CGRect)frame{
     if (self = [super initWithFrame:frame]) {
-        [self setBackgroundColor:[UIColor redColor]];
+        [self setBackgroundColor:[UIColor whiteColor]];
+
         _scrollView = [[UIScrollView alloc] initWithFrame:CGRectMake(0, 0, frame.size.width, frame.size.height-2)];
         [_scrollView setContentSize:CGSizeMake(frame.size.width,0)];
         _scrollView.showsHorizontalScrollIndicator = NO;
@@ -49,18 +50,13 @@
             make.leading.equalTo(self);
             make.trailing.equalTo(self);
             make.height.mas_equalTo(1);
-            make.bottom.equalTo(self).offset(0);
+            make.bottom.equalTo(self);
         }];
-        
         
         _flagLine = [[UIView alloc] initWithFrame:CGRectMake(20,self.frame.size.height-2,64 ,2)];
         [_flagLine setBackgroundColor:[UIColor colorWithHexString:ColorSelect]];
         [self addSubview:_flagLine];
-//        [_flagLine mas_makeConstraints:^(MASConstraintMaker *make) {
-//            make.width.mas_equalTo(64);
-//            make.height.mas_equalTo(2);
-//            make.bottom.equalTo(self).offset(0);
-//        }];
+
         
     }
     return self;

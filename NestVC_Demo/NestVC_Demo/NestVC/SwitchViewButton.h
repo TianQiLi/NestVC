@@ -21,10 +21,6 @@
 @end
 
 
-//@protocol SwitchViewButtonCollectionCellDelegate <NSObject>
-//-(void)clickCellItem:(NSInteger)indexItem;
-//
-//@end
 
 @interface SwitchViewButtonCollectionCell : UICollectionViewCell<SwitchViewButtonDelegate>
 @property (nonatomic, strong) SwitchViewButton * swithchViewbutton;
