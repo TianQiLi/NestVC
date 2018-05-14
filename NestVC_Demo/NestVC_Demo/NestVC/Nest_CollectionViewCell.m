@@ -19,18 +19,18 @@ NSString * const CellSelectedNotification = @"CellSelectedNotification";
         [flowLayout setMinimumInteritemSpacing:0.0f];
         [flowLayout setMinimumLineSpacing:0.0f];
         [flowLayout setSectionInset:UIEdgeInsetsZero];
+        
         _subCollectionView = [[UICollectionView alloc]initWithFrame:CGRectMake(0, 0, self.frame.size.width, 300) collectionViewLayout:flowLayout];
         [_subCollectionView setBackgroundColor:[UIColor colorWithHexString:@"0xffffff"]];
         _subCollectionView.delegate = self;
         _subCollectionView.dataSource = self;
-        [self addSubview:_subCollectionView];
+        [self.contentView addSubview:_subCollectionView];
         [_subCollectionView mas_makeConstraints:^(MASConstraintMaker *make) {
-            make.leading.equalTo(self);
-            make.trailing.equalTo(self);
-            make.top.equalTo(self);//44
-            make.bottom.equalTo(self);
+            make.leading.equalTo(self.contentView);
+            make.trailing.equalTo(self.contentView);
+            make.top.equalTo(self.contentView);
+            make.bottom.equalTo(self.contentView);
         }];
-        
 
     }
     return self;

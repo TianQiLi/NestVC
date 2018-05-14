@@ -13,6 +13,7 @@ extern NSString * const SwitchBttonClickNotification;
 @property (nonatomic, strong) NSDictionary *paramaterDic;
 - (id)initWithSwitchItemArray:(NSArray *)arrayItem withDelegate:(id)obj;
 - (id)initWithSwitchItemArray:(NSArray *)arrayItem withClassArray:(NSArray *)classCellArray withIdentifiter:(NSArray *)cellIdentiArray;
+- (id)initWithSwitchItemArray:(NSArray *)arrayItem withClassArray:(NSArray *)classCellArray withIdentifiter:(NSArray *)cellIdentiArray  withRect:(CGRect)frame;
 
 - (void)setSwitchButtonBottomMargin:(NSInteger)bottomMargin;
 - (void)staticsCourseType:(NSInteger)index;

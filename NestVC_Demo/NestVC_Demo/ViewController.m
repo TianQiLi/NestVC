@@ -17,7 +17,7 @@
 
 @implementation ViewController
 - (IBAction)clickPresentBtn:(id)sender {
-    NestVC * courseVC = [[NestVC alloc] initWithSwitchItemArray:@[@"录播",@"直播",@"试卷"]  withClassArray:@[NSStringFromClass([Free_CourseVC class])] withIdentifiter:@[[Free_CourseVC  cellIdentifiter]]];
+    NestVC * courseVC = [[NestVC alloc] initWithSwitchItemArray:@[@"录播",@"直播",@"试卷"]  withClassArray:@[NSStringFromClass([Free_CourseVC class])] withIdentifiter:@[[Free_CourseVC  cellIdentifiter]] withRect:CGRectMake(0,0,self.view.frame.size.width,self.view.frame.size.height-64)];
     [self.navigationController pushViewController:courseVC animated:YES];
 }
 
